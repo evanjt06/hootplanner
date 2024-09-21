@@ -16,7 +16,6 @@ class OnboardingData(BaseModel):
     completed_courses: Optional[List[str]] = None
     career_interests: Optional[str] = None
     exploration_interests: Optional[str] = None
-    num_schedule_versions: Optional[int] = None
     schedule_specific_comments: Optional[str] = None
 
 class extracurricularData(BaseModel):
@@ -44,16 +43,16 @@ def get_course_details(course_code):
     if course.empty:
         return f"Course {course_code} not found."
     
-    # Extract course details
+    # Extract course details, handle NaN values by replacing them with empty strings
     details = {
         "code": course['course_code'].iloc[0],
-        "course_title": course['title'].iloc[0],
-        "description": course['description'].iloc[0],
-        "prerequisites": course['prerequisites'].iloc[0],
-        "hours": course['credit_hours'].iloc[0],
-        "major": course['major'].iloc[0],
-        "type": "Required Course" if course['require'].iloc[0] == "Yes" else "Elective Course",
-        "year": course['year_level'].iloc[0]
+        "course_title": course['title'].fillna("").iloc[0],
+        "description": course['description'].fillna("").iloc[0],
+        "prerequisites": course['prerequisites'].fillna("").iloc[0],
+        "hours": course['credit_hours'].fillna(0).iloc[0],
+        "major": course['major'].fillna("").iloc[0],
+        "type": "Required Course" if course['require'].fillna("No").iloc[0] == "Yes" else "Elective Course",
+        "year": course['year_level'].fillna("").iloc[0]
     }
     
     return details
@@ -112,82 +111,82 @@ def onboarding(data: OnboardingData):
         major_requirements_details.append(details)
 
     #This is the main major requirement array with all the information. We have to combine this with the electives and the percentages. 
-    print(major_requirements_details)
+    return {"requirements": major_requirements_details}
 
     #Ignore this for now, this is just a template/placeholder
-    recommended_plans = {
-    "version_1": [
-        {
-            "code": "MATH 101",
-            "course_title": "SINGLE VARIABLE CALCULUS I",
-            "description": "Limits, continuity, differentiation, integration, and the Fundamental Theorem of Calculus.",
-            "prerequisites": "None",
-            "hours": 3,
-            "major": "COMP",
-            "type": "Required Course",
-            "year": "Freshman"
-        },
-        {
-            "code": "COMP 182",
-            "course_title": "ALGORITHMS AND DATA STRUCTURES",
-            "description": "Introduction to algorithms, data structures, and their design and analysis.",
-            "prerequisites": "COMP 140",
-            "hours": 3,
-            "major": "COMP",
-            "type": "Required Course",
-            "year": "Freshman"
-        }
-    ],
-    "percentage_1": 90.0,
-    "version_2": [
-        {
-            "code": "MATH 102",
-            "course_title": "SINGLE VARIABLE CALCULUS II",
-            "description": "Continuation of MATH 101. Includes further techniques of integration, as well as infinite sequences and series.",
-            "prerequisites": "None",
-            "hours": 3,
-            "major": "COMP",
-            "type": "Required Course",
-            "year": "Freshman"
-        },
-        {
-            "code": "COMP 182",
-            "course_title": "ALGORITHMS AND DATA STRUCTURES",
-            "description": "Introduction to algorithms, data structures, and their design and analysis.",
-            "prerequisites": "COMP 140",
-            "hours": 3,
-            "major": "COMP",
-            "type": "Required Course",
-            "year": "Freshman"
-        }
-    ],
-    "percentage_2": 85.0,
-    "version_3": [
-        {
-            "code": "MATH 101",
-            "course_title": "SINGLE VARIABLE CALCULUS I",
-            "description": "Limits, continuity, differentiation, integration, and the Fundamental Theorem of Calculus.",
-            "prerequisites": "None",
-            "hours": 3,
-            "major": "COMP",
-            "type": "Required Course",
-            "year": "Freshman"
-        },
-        {
-            "code": "COMP 140",
-            "course_title": "COMPUTATIONAL THINKING",
-            "description": "Introduction to programming and computational problem-solving techniques.",
-            "prerequisites": "None",
-            "hours": 3,
-            "major": "COMP",
-            "type": "Required Course",
-            "year": "Freshman"
-        }
-    ],
-    "percentage_3": 80.0
-    }
+    # recommended_plans = {
+    # "version_1": [
+    #     {
+    #         "code": "MATH 101",
+    #         "course_title": "SINGLE VARIABLE CALCULUS I",
+    #         "description": "Limits, continuity, differentiation, integration, and the Fundamental Theorem of Calculus.",
+    #         "prerequisites": "None",
+    #         "hours": 3,
+    #         "major": "COMP",
+    #         "type": "Required Course",
+    #         "year": "Freshman"
+    #     },
+    #     {
+    #         "code": "COMP 182",
+    #         "course_title": "ALGORITHMS AND DATA STRUCTURES",
+    #         "description": "Introduction to algorithms, data structures, and their design and analysis.",
+    #         "prerequisites": "COMP 140",
+    #         "hours": 3,
+    #         "major": "COMP",
+    #         "type": "Required Course",
+    #         "year": "Freshman"
+    #     }
+    # ],
+    # "percentage_1": 90.0,
+    # "version_2": [
+    #     {
+    #         "code": "MATH 102",
+    #         "course_title": "SINGLE VARIABLE CALCULUS II",
+    #         "description": "Continuation of MATH 101. Includes further techniques of integration, as well as infinite sequences and series.",
+    #         "prerequisites": "None",
+    #         "hours": 3,
+    #         "major": "COMP",
+    #         "type": "Required Course",
+    #         "year": "Freshman"
+    #     },
+    #     {
+    #         "code": "COMP 182",
+    #         "course_title": "ALGORITHMS AND DATA STRUCTURES",
+    #         "description": "Introduction to algorithms, data structures, and their design and analysis.",
+    #         "prerequisites": "COMP 140",
+    #         "hours": 3,
+    #         "major": "COMP",
+    #         "type": "Required Course",
+    #         "year": "Freshman"
+    #     }
+    # ],
+    # "percentage_2": 85.0,
+    # "version_3": [
+    #     {
+    #         "code": "MATH 101",
+    #         "course_title": "SINGLE VARIABLE CALCULUS I",
+    #         "description": "Limits, continuity, differentiation, integration, and the Fundamental Theorem of Calculus.",
+    #         "prerequisites": "None",
+    #         "hours": 3,
+    #         "major": "COMP",
+    #         "type": "Required Course",
+    #         "year": "Freshman"
+    #     },
+    #     {
+    #         "code": "COMP 140",
+    #         "course_title": "COMPUTATIONAL THINKING",
+    #         "description": "Introduction to programming and computational problem-solving techniques.",
+    #         "prerequisites": "None",
+    #         "hours": 3,
+    #         "major": "COMP",
+    #         "type": "Required Course",
+    #         "year": "Freshman"
+    #     }
+    # ],
+    # "percentage_3": 80.0
+    # }
 
-    return recommended_plans
+    # return recommended_plans
 
 @app.get("/extracurriculars")
 def get_extracurriculars(data: extracurricularData):
