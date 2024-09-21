@@ -39,6 +39,8 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command"
+import { toast } from "sonner"
+import { useRouter } from 'next/router'
 
 const majors = [
   { "value": "Accounting", "label": "Accounting" },
@@ -145,6 +147,8 @@ const majors = [
   { "value": "Vocal Performance", "label": "Vocal Performance" }
 ] as const
 
+
+
 const profileFormSchema = z.object({
   // username: z
   //   .string()
@@ -159,8 +163,8 @@ const profileFormSchema = z.object({
       required_error: "Please select a grade.",
     }),
   // bio: z.string().max(160).min(4),
-  type: z.enum(["all", "mentions"], {
-    required_error: "You need to select a notification type.",
+  sem: z.enum(["Fall", "Spring"], {
+    required_error: "You need to select a semester type.",
   }),
   major: z.string({
     required_error: "Please select a major.",
@@ -197,15 +201,16 @@ export function ProfileForm() {
   //   control: form.control,
   // })
 
-  function onSubmit(data: ProfileFormValues) {
-    // toast({
-    //   title: "You submitted the following values:",
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // })
+  function onSubmit(data: ProfileFormValues) 
+  {
+    const {grade,sem,major} = data
+    localStorage.setItem("grade",grade)
+    localStorage.setItem("sem",sem)
+    localStorage.setItem("major",major)
+  
+    toast("Notification", {
+      description: "Your profile has been saved locally!",
+    })
   }
 
   return (
@@ -257,7 +262,7 @@ export function ProfileForm() {
         />
         <FormField
           control={form.control}
-          name="type"
+          name="sem"
           render={({ field }) => (
             <FormItem className="space-y-3">
               <FormLabel>Current Semester</FormLabel>
@@ -269,7 +274,7 @@ export function ProfileForm() {
                 >
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value="all" />
+                      <RadioGroupItem value="Fall" />
                     </FormControl>
                     <FormLabel className="font-normal">
                       Fall
@@ -277,7 +282,7 @@ export function ProfileForm() {
                   </FormItem>
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value="mentions" />
+                      <RadioGroupItem value="Spring" />
                     </FormControl>
                     <FormLabel className="font-normal">
                       Spring

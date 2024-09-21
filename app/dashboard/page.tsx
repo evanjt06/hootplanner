@@ -1,4 +1,7 @@
+"use client"
+
 import * as React from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import {
@@ -76,168 +79,40 @@ import {
 } from "@/components/ui/tabs"
 import owllogo from "../assets/OwlLogo.jpg"
 
-const courses = [
-    {
-      course_code: "MATH 101",
-      title: "SINGLE VARIABLE CALCULUS I",
-      description:
-        "Limits, continuity, differentiation, integration, and the Fundamental Theorem of Calculus.",
-      prerequisites: "None",
-      credit_hours: "3",
-      major: "COMP",
-      require: "Yes",
-      year_level: "Freshman",
-    },
-    {
-      course_code: "MATH 102",
-      title: "SINGLE VARIABLE CALCULUS II",
-      description:
-        "Continuation of MATH 101. Includes further techniques of integration, as well as infinite sequences and series, Taylor polynomials and Taylor series, parametric equations, arc length, polar coordinates, complex numbers, and Fourier polynomials.",
-      prerequisites: "None",
-      credit_hours: "3",
-      major: "COMP",
-      require: "Yes",
-      year_level: "Freshman",
-    },
-    {
-        course_code: "MATH 101",
-        title: "SINGLE VARIABLE CALCULUS I",
-        description:
-          "Limits, continuity, differentiation, integration, and the Fundamental Theorem of Calculus.",
-        prerequisites: "None",
-        credit_hours: "3",
-        major: "COMP",
-        require: "Yes",
-        year_level: "Freshman",
-      },
-      {
-        course_code: "MATH 102",
-        title: "SINGLE VARIABLE CALCULUS II",
-        description:
-          "Continuation of MATH 101. Includes further techniques of integration, as well as infinite sequences and series, Taylor polynomials and Taylor series, parametric equations, arc length, polar coordinates, complex numbers, and Fourier polynomials.",
-        prerequisites: "None",
-        credit_hours: "3",
-        major: "COMP",
-        require: "Yes",
-        year_level: "Freshman",
-      },
-      {
-        course_code: "MATH 101",
-        title: "SINGLE VARIABLE CALCULUS I",
-        description:
-          "Limits, continuity, differentiation, integration, and the Fundamental Theorem of Calculus.",
-        prerequisites: "None",
-        credit_hours: "3",
-        major: "COMP",
-        require: "Yes",
-        year_level: "Freshman",
-      },
-      {
-        course_code: "MATH 102",
-        title: "SINGLE VARIABLE CALCULUS II",
-        description:
-          "Continuation of MATH 101. Includes further techniques of integration, as well as infinite sequences and series, Taylor polynomials and Taylor series, parametric equations, arc length, polar coordinates, complex numbers, and Fourier polynomials.",
-        prerequisites: "None",
-        credit_hours: "3",
-        major: "COMP",
-        require: "Yes",
-        year_level: "Freshman",
-      },
-  ];
-
-  const courses2 = 
-    [
-        {
-          "course_code": "MATH 212",
-          "title": "MULTIVARIABLE CALCULUS",
-          "description": "Calculus of multiple variables, including vectors, partial derivatives and gradients, double and triple integrals, vector fields, and related theorems.",
-          "prerequisites": "",
-          "credit_hours": 3,
-          "major": "COMP",
-          "require": "Yes",
-          "year_level": "Sophomore"
-        },
-        {
-          "course_code": "STAT 310",
-          "title": "PROBABILITY AND STATISTICS",
-          "description": "Central concepts and methods of statistics, including probability, random variables, distributions, estimation, and hypothesis testing.",
-          "prerequisites": "",
-          "credit_hours": "3-4",
-          "major": "COMP",
-          "require": "Yes",
-          "year_level": "Sophomore"
-        },
-        {
-          "course_code": "COMP 215",
-          "title": "INTRODUCTION TO PROGRAM DESIGN",
-          "description": "Covers the principles of programming and program design, with assignments that fit together to complete a real-world application.",
-          "prerequisites": "",
-          "credit_hours": 4,
-          "major": "COMP",
-          "require": "Yes",
-          "year_level": "Sophomore"
-        },
-        {
-          "course_code": "COMP 222",
-          "title": "INTRODUCTION TO COMPUTER ORGANIZATION",
-          "description": "Introduces students to the organization of computer systems, including data representation, memory allocation, and assembly language.",
-          "prerequisites": "",
-          "credit_hours": 4,
-          "major": "COMP",
-          "require": "Yes",
-          "year_level": "Sophomore"
-        }
-      ]
-
-      
-    const courses3 =[
-        {
-          "course_code": "MATH 355",
-          "title": "LINEAR ALGEBRA",
-          "description": "Covers systems of linear equations, matrices, vector spaces, and eigenvalues/eigenvectors.",
-          "prerequisites": "",
-          "credit_hours": 3,
-          "major": "COMP",
-          "require": "Yes",
-          "year_level": "Junior"
-        },
-        {
-          "course_code": "COMP 301",
-          "title": "COMPUTER ETHICS",
-          "description": "Discussion-based course on moral philosophy and social responsibility in computer science.",
-          "prerequisites": "",
-          "credit_hours": 3,
-          "major": "COMP",
-          "require": "Yes",
-          "year_level": "Junior"
-        },
-        {
-          "course_code": "COMP 318",
-          "title": "CONCURRENT PROGRAM DESIGN",
-          "description": "Introduces principles of designing large-scale concurrent software systems, with a focus on best practices for concurrency.",
-          "prerequisites": "",
-          "credit_hours": 4,
-          "major": "COMP",
-          "require": "Yes",
-          "year_level": "Junior"
-        },
-        {
-          "course_code": "COMP 382",
-          "title": "REASONING ABOUT ALGORITHMS",
-          "description": "Introduction to reasoning techniques about algorithms, covering topics like logic, correctness, and computational models.",
-          "prerequisites": "",
-          "credit_hours": 4,
-          "major": "COMP",
-          "require": "Yes",
-          "year_level": "Junior"
-        }
-      ]
-      
-
 export const description =
   "An orders dashboard with a sidebar navigation. The sidebar has icon navigation. The content area has a breadcrumb and search in the header. The main area has a list of recent orders with a filter and export button. The main area also has a detailed view of a single order with order details, shipping information, billing information, customer information, and payment information."
 
 export default function Dashboard() {
+
+  const [courses1, setCourses1] = useState([])
+  const [courses2, setCourses2] = useState([])
+  const [courses3, setCourses3] = useState([])
+
+  const [pc1, setPc1] = useState<string>()
+  const [pc2, setPc2] = useState<string>()
+  const [pc3, setPc3] = useState<string>()
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const version1Data = localStorage.getItem("version_1");
+    setCourses1(version1Data ? JSON.parse(version1Data) : [])
+    
+    const version2Data = localStorage.getItem("version_2");
+    setCourses2(version2Data ? JSON.parse(version2Data) : [])
+    
+    const version3Data = localStorage.getItem("version_3");
+    setCourses3(version3Data ? JSON.parse(version3Data) : [])
+
+    const per1 = localStorage.getItem("percentage_1")
+    const per2 = localStorage.getItem("percentage_2")
+    const per3 = localStorage.getItem("percentage_3")
+
+    setPc1(per1 ? per1 : "")
+    setPc2(per2 ? per2 : "")
+    setPc3(per3 ? per3 : "")
+
+      }
+  }, [])
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -317,8 +192,8 @@ export default function Dashboard() {
                 <Card x-chunk="dashboard-05-chunk-3">
                   <CardHeader className="px-7">
                   <CardTitle style={{fontSize: 24, display: "flex", justifyContent: "space-between"}}>
-                    18 credit hour schedule
-                    <i style={{color: "darkgreen"}}>{Math.trunc(Math.random() * 100)}% similarity</i>
+                    17-18 credit hours schedule
+                    <i style={{color: "darkgreen"}}>{pc1}% similarity</i>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -343,13 +218,13 @@ export default function Dashboard() {
                       </TableHeader>
                       <TableBody>
 
-                       {courses.map((course, index) => (
+                       {courses1.map((course: any, index: number) => (
                         <TableRow className="bg-accent" key={index}>
                           <TableCell>
-                            <div className="font-medium">{course.course_code}</div>
+                            <div className="font-medium">{course.code}</div>
                           </TableCell>
                           <TableCell className="hidden sm:table-cell">
-                          {course.title}
+                          {course.course_title}
                           </TableCell>
                           <TableCell className="hidden sm:table-cell">
                             {course.description}
@@ -358,16 +233,16 @@ export default function Dashboard() {
                           {course.prerequisites}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                          {course.credit_hours}
+                          {course.hours}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
                           {course.major}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                          {course.require === "Yes" ? "Required Course" : "Elective Course"}
+                          {course.type}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
-                          {course.year_level}
+                          {course.year}
                           </TableCell>
                         </TableRow>))}
                        
@@ -381,8 +256,8 @@ export default function Dashboard() {
                 <Card x-chunk="dashboard-05-chunk-3">
                   <CardHeader className="px-7">
                   <CardTitle style={{fontSize: 24, display: "flex", justifyContent: "space-between"}}>
-                    15 credit hour schedule
-                    <i style={{color: "darkgreen"}}>{Math.trunc(Math.random() * 100)}% similarity</i>
+                    15-16 credit hours schedule
+                    <i style={{color: "darkgreen"}}>{pc2}% similarity</i>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -407,36 +282,33 @@ export default function Dashboard() {
                       </TableHeader>
                       <TableBody>
 
-                       {courses2.map((course, index) => (
+                       {courses2.map((course: any, index: number) => (
                         <TableRow className="bg-accent" key={index}>
-                          <TableCell>
-                            <div className="font-medium">{course.course_code}</div>
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                          {course.title}
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            {/* <Badge className="text-xs" variant="secondary">
-                              Fulfilled
-                            </Badge> */}
-                            {course.description}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                          {course.prerequisites}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                          {course.credit_hours}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                          {course.major}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                          {course.require === "Yes" ? "Required Course" : "Elective Course"}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                          {course.year_level}
-                          </TableCell>
-                        </TableRow>))}
+                        <TableCell>
+                          <div className="font-medium">{course.code}</div>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                        {course.course_title}
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          {course.description}
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell">
+                        {course.prerequisites}
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell">
+                        {course.hours}
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell">
+                        {course.major}
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell">
+                        {course.type}
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell">
+                        {course.year}
+                        </TableCell>
+                      </TableRow>))}
                        
                       </TableBody>
                     </Table>
@@ -448,8 +320,8 @@ export default function Dashboard() {
                 <Card x-chunk="dashboard-05-chunk-3">
                   <CardHeader className="px-7">
                   <CardTitle style={{fontSize: 24, display: "flex", justifyContent: "space-between"}}>
-                    14 credit hour schedule
-                    <i style={{color: "darkgreen"}}>{Math.trunc(Math.random() * 100)}% similarity</i>
+                    12-13 credit hour schedule
+                    <i style={{color: "darkgreen"}}>{pc3}% similarity</i>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -474,36 +346,33 @@ export default function Dashboard() {
                       </TableHeader>
                       <TableBody>
 
-                       {courses3.map((course, index) => (
+                       {courses3.map((course: any, index: number) => (
                         <TableRow className="bg-accent" key={index}>
-                          <TableCell>
-                            <div className="font-medium">{course.course_code}</div>
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                          {course.title}
-                          </TableCell>
-                          <TableCell className="hidden sm:table-cell">
-                            {/* <Badge className="text-xs" variant="secondary">
-                              Fulfilled
-                            </Badge> */}
-                            {course.description}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                          {course.prerequisites}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                          {course.credit_hours}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                          {course.major}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                          {course.require === "Yes" ? "Required Course" : "Elective Course"}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                          {course.year_level}
-                          </TableCell>
-                        </TableRow>))}
+                        <TableCell>
+                          <div className="font-medium">{course.code}</div>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                        {course.course_title}
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell">
+                          {course.description}
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell">
+                        {course.prerequisites}
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell">
+                        {course.hours}
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell">
+                        {course.major}
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell">
+                        {course.type}
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell">
+                        {course.year}
+                        </TableCell>
+                      </TableRow>))}
                        
                       </TableBody>
                     </Table>

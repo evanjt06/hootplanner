@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-
+import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -49,21 +49,12 @@ const accountFormSchema = z.object({
   //   .max(30, {
   //     message: "Name must not be longer than 30 characters.",
   //   }),
-  credit: z
-    .string({
-      required_error: "Please select credit.",
-    }),
-  dob: z.date({
-    required_error: "A date of birth is required.",
-  }),
   comments: z.string({
     required_error: "Please write a comment.",
-  }),
+  }).optional(),
   classes: z
   .array(
-    z.object({
-      value: z.string().url({ message: "Please enter classes." }),
-    })
+    z.object({value:z.string()})
   )
   .optional(),
 })
@@ -74,8 +65,7 @@ type AccountFormValues = z.infer<typeof accountFormSchema>
 const defaultValues: Partial<AccountFormValues> = {
   // bio: "I own a computer.",
   classes: [
-    { value: "COMP140" },
-    { value: "MATH101" },
+    { value: "" },
   ],
 }
 
@@ -98,49 +88,21 @@ const { fields, append } = useFieldArray({
 })
 
   function onSubmit(data: AccountFormValues) {
-    // toast({
-    //   title: "You submitted the following values:",
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // })
+    const {comments,classes} = data
+
+    localStorage.setItem("comments",comments || "")
+    if (classes) {
+      localStorage.setItem("classes",JSON.stringify(classes))
+    }
+  
+    toast("Notification", {
+      description: "Your course preferences has been saved locally!",
+    })
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-      <FormField
-          control={form.control}
-          name="credit"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Max # of credit hours</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select the maximum number of credit hours you'd like to take." />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="12">12</SelectItem>
-                  <SelectItem value="13">13</SelectItem>
-                  <SelectItem value="14">14</SelectItem>
-                  <SelectItem value="15">15</SelectItem>
-                  <SelectItem value="16">16</SelectItem>
-                  <SelectItem value="17">17</SelectItem>
-                  <SelectItem value="18">18</SelectItem>
-                </SelectContent>
-              </Select>
-              {/* <FormDescription>
-                You can manage verified email addresses in your{" "}
-                <Link href="/examples/forms">email settings</Link>.
-              </FormDescription> */}
-              {/* <FormMessage /> */}
-            </FormItem>
-          )}
-        />
         <div>
           {fields.map((field, index) => (
             <FormField
