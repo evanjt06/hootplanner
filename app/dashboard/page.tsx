@@ -312,6 +312,7 @@ doc.text('Generated on: ' + new Date().toLocaleDateString(), 15, 290);
 doc.save('schedule.pdf');
   }
 
+  // fetch 3 versions of schedules from localstorage
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const version1Data = localStorage.getItem("version_1");
