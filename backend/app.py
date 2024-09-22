@@ -52,7 +52,6 @@ class ClubRecommendationResponse(BaseModel):
     club_link: str
     similarity_score_percentage: float
 
-
 class OnboardingData(BaseModel):
     current_grade: str
     term: str
@@ -78,10 +77,9 @@ class AdviceRequest(BaseModel):
     exploration_interests: Optional[str] = None
     schedule_specific_comments: Optional[str] = None
 
-df = pd.read_csv('CSBSCourses.csv')
+def get_course_details(course_code, file_name):
 
-def get_course_details(course_code):
-    # Search for the course
+    df = pd.read_csv(file_name)
     course = df[df['course_code'] == course_code]
     
     if course.empty:
@@ -151,7 +149,7 @@ def onboarding(data: OnboardingData):
 
     major_requirements_details = []
     for course_major in major_requirements:
-        details = get_course_details(course_major)
+        details = get_course_details(course_major, "CSBSCourses.csv")
         major_requirements_details.append(details)
     
     # use lance RAG to get elective recommendations
@@ -161,10 +159,46 @@ def onboarding(data: OnboardingData):
     # 12-13 is 1 elective class
 
 
+
     #This is the main major requirement array with all the information. We have to combine this with the electives and the percentages. 
     # return {"requirements": major_requirements_details}
 
+    user_input_embedding = generate_embeddings(data.exploration_interests).flatten()
 
+    hoot = db.open_table("electives")
+    results = hoot.search(user_input_embedding) \
+    .metric("cosine")\
+        .limit(10) \
+        .to_list()
+    
+    elective_course_codes = [i["course_code"] for i in results]
+    print(elective_course_codes)
+
+    elective_course_details = []
+    for course_elective in elective_course_codes[:3]:
+        details = get_course_details(course_elective, "electives.csv")
+        elective_course_details.append(details)
+
+    recommended_plans = {}
+
+    # Version 1: Include all items from elective_course_details
+    recommended_plans["version_1"] = major_requirements_details + elective_course_details
+    recommended_plans["percentage_1"] = 90.0 
+
+    # Version 2: Include first 2 items from elective_course_details
+    recommended_plans["version_2"] = major_requirements_details + elective_course_details[:2]
+    recommended_plans["percentage_2"] = 85.0  
+
+    # Version 3: Include first 1 item from elective_course_details
+    recommended_plans["version_3"] = major_requirements_details + elective_course_details[:1]
+    recommended_plans["percentage_3"] = 80.0 
+
+    return recommended_plans
+
+    # return {"requirements": major_requirements_details, "electives": elective_course_details}
+
+    # for i in results:
+    #     print(i["course_code"],1-i["_distance"]/2+0.1)
 
     #Ignore this for now, this is just a template/placeholder
     # recommended_plans = {
@@ -239,7 +273,7 @@ def onboarding(data: OnboardingData):
     # "percentage_3": 80.0
     # }
 
-    # return recommended_plans
+    # # return recommended_plans
 
 
 # API Route
