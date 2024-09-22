@@ -98,13 +98,14 @@ export default function Dashboard() {
 
   function download() {
     // download all three versions as a PDF. hootplanner
-    const doc = new jsPDF();
+
+const doc = new jsPDF();
 
 // Set font and title
 doc.setFont('helvetica', 'bold');
 doc.setFontSize(22);
 doc.setTextColor(40, 40, 40);
-doc.text('Weekly Schedule', 105, 20, { align: 'center' });
+doc.text('Semester Schedule', 105, 20, { align: 'center' });
 
 // Adding a subtitle
 doc.setFontSize(14);
@@ -116,18 +117,26 @@ doc.setDrawColor(0, 0, 0);
 doc.line(15, 35, 195, 35); // Horizontal line below title
 
 // Define schedule data (example)
-const schedule = [
-  ['Monday', '9:00 AM', 'Data Science Class', 'Room 101'],
-  ['Monday', '11:00 AM', 'CS Club Meeting', 'Room 204'],
-  ['Tuesday', '1:00 PM', 'Machine Learning', 'Lab 3'],
-  ['Wednesday', '9:00 AM', 'Algorithms', 'Room 105'],
-  ['Thursday', '2:00 PM', 'Tennis Practice', 'Court 2'],
-  ['Friday', '10:00 AM', 'Data Science Workshop', 'Room 210'],
-];
+// const schedule = [
+//   ['MATH 101', '9:00 AM', 'Data Science Class', 'Room 101'],
+//   ['COMP 182', '11:00 AM', 'CS Club Meeting', 'Room 204'],
+//   ['MATH 101', '1:00 PM', 'Machine Learning', 'Lab 3'],
+//   ['COMP 182', '9:00 AM', 'Algorithms', 'Room 105'],
+// ];
+// v1 schedule
+const v1 = localStorage.getItem("version_1")
+let schedule:Array<Array<string>> = []
+if (v1) {
+  const v1_parsed = JSON.parse(v1)
+
+  for (let i = 0; i < v1_parsed.length; ++i) {
+    schedule.push([v1_parsed[i]["code"], v1_parsed[i]["course_title"], v1_parsed[i]["hours"],v1_parsed[i]["type"]])
+  }
+}
 
 // Define the table columns
-const columns = ['Code', 'Course Title', 'Description', 'Prerequisites', "Hours"];
-// Code	Course Title	Description	Prerequisites	Hours	Major	Type	Year
+const columns = ['Course Code', 'Course Title', 'Credit Hours', 'Type'];
+
 // Add modern table
 doc.autoTable({
   head: [columns],
@@ -163,6 +172,104 @@ doc.autoTable({
     3: { cellWidth: 50 }, // Location column
   },
 });
+
+// 2nd page
+doc.addPage();
+
+// v2 schedule
+const v2 = localStorage.getItem("version_2")
+schedule = []
+if (v2) {
+  const v2_parsed = JSON.parse(v2)
+
+  for (let i = 0; i < v2_parsed.length; ++i) {
+    schedule.push([v2_parsed[i]["code"], v2_parsed[i]["course_title"], v2_parsed[i]["hours"],v2_parsed[i]["type"]])
+  }
+}
+
+doc.autoTable({
+  head: [columns],
+  body: schedule,
+  theme: 'grid', // 'grid' makes it look modern and structured
+  startY: 40,
+  styles: {
+    font: 'helvetica',
+    fontSize: 12,
+    lineColor: [200, 200, 200],
+    lineWidth: 0.2,
+    cellPadding: 8,
+    textColor: [50, 50, 50],
+  },
+  headStyles: {
+    fillColor: [63, 81, 181], // Modern blue header
+    textColor: 255,
+    fontSize: 12,
+    halign: 'center',
+  },
+  bodyStyles: {
+    fillColor: [245, 245, 245], // Alternating row colors
+    textColor: [0, 0, 0],
+    fontSize: 11,
+  },
+  alternateRowStyles: {
+    fillColor: [255, 255, 255], // Alternate white
+  },
+  columnStyles: {
+    0: { cellWidth: 30 }, // Day column
+    1: { cellWidth: 40 }, // Time column
+    2: { cellWidth: 70 }, // Event column
+    3: { cellWidth: 50 }, // Location column
+  },
+});
+
+doc.addPage()
+
+// v3 schedule
+const v3 = localStorage.getItem("version_3")
+schedule = []
+if (v3) {
+  const v3_parsed = JSON.parse(v3)
+
+  for (let i = 0; i < v3_parsed.length; ++i) {
+    schedule.push([v3_parsed[i]["code"], v3_parsed[i]["course_title"], v3_parsed[i]["hours"],v3_parsed[i]["type"]])
+  }
+}
+
+doc.autoTable({
+  head: [columns],
+  body: schedule,
+  theme: 'grid', // 'grid' makes it look modern and structured
+  startY: 40,
+  styles: {
+    font: 'helvetica',
+    fontSize: 12,
+    lineColor: [200, 200, 200],
+    lineWidth: 0.2,
+    cellPadding: 8,
+    textColor: [50, 50, 50],
+  },
+  headStyles: {
+    fillColor: [63, 81, 181], // Modern blue header
+    textColor: 255,
+    fontSize: 12,
+    halign: 'center',
+  },
+  bodyStyles: {
+    fillColor: [245, 245, 245], // Alternating row colors
+    textColor: [0, 0, 0],
+    fontSize: 11,
+  },
+  alternateRowStyles: {
+    fillColor: [255, 255, 255], // Alternate white
+  },
+  columnStyles: {
+    0: { cellWidth: 30 }, // Day column
+    1: { cellWidth: 40 }, // Time column
+    2: { cellWidth: 70 }, // Event column
+    3: { cellWidth: 50 }, // Location column
+  },
+});
+
 
 // Add footer
 doc.setFontSize(10);
