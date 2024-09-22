@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import lancedb
 from transformers import AutoTokenizer, AutoModel
 import torch
+import random
 
 app = FastAPI()
 app.add_middleware(
@@ -151,17 +152,22 @@ def onboarding(data: OnboardingData):
     for course_major in major_requirements:
         details = get_course_details(course_major, "CSBSCourses.csv")
         major_requirements_details.append(details)
+    major_requirements_details.append({
+        "code": "FWIS 100",
+        "course_title": "FWIS WRITING STUDIO",
+        "description": "First-Year Writing-Intensive Seminar (FWIS) courses at Rice University fulfill the Writing and Communication Requirement for all bachelor's degree students. Capped at 16 students, these courses focus on developing writing, speaking, and visual communication skills through diverse assignments and close faculty interaction.",
+        "prerequisites": "",
+        "hours": 3,
+        "major": "",
+        "type": "Required Course",
+        "year": "Freshman"
+    })
     
     # use lance RAG to get elective recommendations
 
     # 17-18 is 3 elective classes
     # 15-16 is 2 elective classes
     # 12-13 is 1 elective class
-
-
-
-    #This is the main major requirement array with all the information. We have to combine this with the electives and the percentages. 
-    # return {"requirements": major_requirements_details}
 
     user_input_embedding = generate_embeddings(data.exploration_interests).flatten()
 
@@ -175,105 +181,25 @@ def onboarding(data: OnboardingData):
     print(elective_course_codes)
 
     elective_course_details = []
-    for course_elective in elective_course_codes[:3]:
+    for course_elective in elective_course_codes:
         details = get_course_details(course_elective, "electives.csv")
         elective_course_details.append(details)
 
     recommended_plans = {}
 
     # Version 1: Include all items from elective_course_details
-    recommended_plans["version_1"] = major_requirements_details + elective_course_details
-    recommended_plans["percentage_1"] = 90.0 
+    recommended_plans["version_1"] = major_requirements_details + elective_course_details[:3]
+    recommended_plans["percentage_1"] = round((1-0.5*results[0]['_distance']+0.1) * 100, 2)
 
     # Version 2: Include first 2 items from elective_course_details
-    recommended_plans["version_2"] = major_requirements_details + elective_course_details[:2]
-    recommended_plans["percentage_2"] = 85.0  
+    recommended_plans["version_2"] = major_requirements_details + random.sample(elective_course_details, 2)
+    recommended_plans["percentage_2"] = round((1-0.5*results[1]['_distance']+0.1) * 100, 2) 
 
     # Version 3: Include first 1 item from elective_course_details
-    recommended_plans["version_3"] = major_requirements_details + elective_course_details[:1]
-    recommended_plans["percentage_3"] = 80.0 
+    recommended_plans["version_3"] = major_requirements_details + random.sample(elective_course_details, 1)
+    recommended_plans["percentage_3"] = round((1-0.5*results[2]['_distance']+0.1) * 100, 2)
 
     return recommended_plans
-
-    # return {"requirements": major_requirements_details, "electives": elective_course_details}
-
-    # for i in results:
-    #     print(i["course_code"],1-i["_distance"]/2+0.1)
-
-    #Ignore this for now, this is just a template/placeholder
-    # recommended_plans = {
-    # "version_1": [
-    #     {
-    #         "code": "MATH 101",
-    #         "course_title": "SINGLE VARIABLE CALCULUS I",
-    #         "description": "Limits, continuity, differentiation, integration, and the Fundamental Theorem of Calculus.",
-    #         "prerequisites": "None",
-    #         "hours": 3,
-    #         "major": "COMP",
-    #         "type": "Required Course",
-    #         "year": "Freshman"
-    #     },
-    #     {
-    #         "code": "COMP 182",
-    #         "course_title": "ALGORITHMS AND DATA STRUCTURES",
-    #         "description": "Introduction to algorithms, data structures, and their design and analysis.",
-    #         "prerequisites": "COMP 140",
-    #         "hours": 3,
-    #         "major": "COMP",
-    #         "type": "Required Course",
-    #         "year": "Freshman"
-    #     }
-    # ],
-    # "percentage_1": 90.0,
-    # "version_2": [
-    #     {
-    #         "code": "MATH 102",
-    #         "course_title": "SINGLE VARIABLE CALCULUS II",
-    #         "description": "Continuation of MATH 101. Includes further techniques of integration, as well as infinite sequences and series.",
-    #         "prerequisites": "None",
-    #         "hours": 3,
-    #         "major": "COMP",
-    #         "type": "Required Course",
-    #         "year": "Freshman"
-    #     },
-    #     {
-    #         "code": "COMP 182",
-    #         "course_title": "ALGORITHMS AND DATA STRUCTURES",
-    #         "description": "Introduction to algorithms, data structures, and their design and analysis.",
-    #         "prerequisites": "COMP 140",
-    #         "hours": 3,
-    #         "major": "COMP",
-    #         "type": "Required Course",
-    #         "year": "Freshman"
-    #     }
-    # ],
-    # "percentage_2": 85.0,
-    # "version_3": [
-    #     {
-    #         "code": "MATH 101",
-    #         "course_title": "SINGLE VARIABLE CALCULUS I",
-    #         "description": "Limits, continuity, differentiation, integration, and the Fundamental Theorem of Calculus.",
-    #         "prerequisites": "None",
-    #         "hours": 3,
-    #         "major": "COMP",
-    #         "type": "Required Course",
-    #         "year": "Freshman"
-    #     },
-    #     {
-    #         "code": "COMP 140",
-    #         "course_title": "COMPUTATIONAL THINKING",
-    #         "description": "Introduction to programming and computational problem-solving techniques.",
-    #         "prerequisites": "None",
-    #         "hours": 3,
-    #         "major": "COMP",
-    #         "type": "Required Course",
-    #         "year": "Freshman"
-    #     }
-    # ],
-    # "percentage_3": 80.0
-    # }
-
-    # # return recommended_plans
 
 
 # API Route

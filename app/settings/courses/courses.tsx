@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -76,6 +77,7 @@ const defaultValues: Partial<AccountFormValues> = {
 // }
 
 export function AccountForm() {
+  const router = useRouter()
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues,
@@ -98,6 +100,11 @@ const { fields, append } = useFieldArray({
     toast("Notification", {
       description: "Your course preferences has been saved locally!",
     })
+
+
+    setTimeout(() => {
+      router.push("/settings/interests")
+    },800)
   }
 
   return (

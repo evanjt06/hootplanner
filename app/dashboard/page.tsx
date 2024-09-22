@@ -352,14 +352,7 @@ doc.save('schedule.pdf');
               >
                 <Home className="h-5 w-5" />
               </Link>
-            
-              <Link
-                href="/clubs"
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-              >
-                <UsersRound className="h-5 w-5" />
-              </Link>
-           
+               
               <Link
                 href="/research"
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
@@ -367,6 +360,14 @@ doc.save('schedule.pdf');
                 <Microscope className="h-5 w-5" />
               </Link>
             
+            
+              <Link
+                href="/clubs"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+              >
+                <UsersRound className="h-5 w-5" />
+              </Link>
+          
               <Link
                 href="/settings"
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
@@ -429,9 +430,6 @@ doc.save('schedule.pdf');
                           <TableHead className="hidden sm:table-cell">
                             Description
                           </TableHead>
-                          <TableHead className="hidden md:table-cell">
-                            Prerequisites
-                          </TableHead>
                           <TableHead className="hidden md:table-cell">Hours</TableHead>
                           <TableHead className="hidden md:table-cell">Type</TableHead>
                           <TableHead className="hidden md:table-cell">Year</TableHead>
@@ -449,9 +447,6 @@ doc.save('schedule.pdf');
                           </TableCell>
                           <TableCell className="hidden sm:table-cell">
                             {course.description}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                          {course.prerequisites}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
                           {course.hours}
@@ -489,9 +484,6 @@ doc.save('schedule.pdf');
                           <TableHead className="hidden sm:table-cell">
                             Description
                           </TableHead>
-                          <TableHead className="hidden md:table-cell">
-                            Prerequisites
-                          </TableHead>
                           <TableHead className="hidden md:table-cell">Hours</TableHead>
                           <TableHead className="hidden md:table-cell">Type</TableHead>
                           <TableHead className="hidden md:table-cell">Year</TableHead>
@@ -509,9 +501,6 @@ doc.save('schedule.pdf');
                         </TableCell>
                         <TableCell className="hidden sm:table-cell">
                           {course.description}
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                        {course.prerequisites}
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
                         {course.hours}
@@ -549,9 +538,6 @@ doc.save('schedule.pdf');
                           <TableHead className="hidden sm:table-cell">
                             Description
                           </TableHead>
-                          <TableHead className="hidden md:table-cell">
-                            Prerequisites
-                          </TableHead>
                           <TableHead className="hidden md:table-cell">Hours</TableHead>
                           <TableHead className="hidden md:table-cell">Type</TableHead>
                           <TableHead className="hidden md:table-cell">Year</TableHead>
@@ -569,9 +555,6 @@ doc.save('schedule.pdf');
                         </TableCell>
                         <TableCell className="hidden sm:table-cell">
                           {course.description}
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                        {course.prerequisites}
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
                         {course.hours}

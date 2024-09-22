@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useFieldArray, useForm } from "react-hook-form"
 import { z } from "zod"
@@ -40,7 +41,6 @@ import {
   CommandList,
 } from "@/components/ui/command"
 import { toast } from "sonner"
-import { useRouter } from 'next/router'
 
 const majors = [
   { "value": "Accounting", "label": "Accounting" },
@@ -190,6 +190,9 @@ const defaultValues: Partial<ProfileFormValues> = {
 }
 
 export function ProfileForm() {
+
+  const router = useRouter()
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
@@ -211,6 +214,11 @@ export function ProfileForm() {
     toast("Notification", {
       description: "Your profile has been saved locally!",
     })
+
+    setTimeout(() => {
+      router.push("/settings/courses")
+    },800)
+    
   }
 
   return (

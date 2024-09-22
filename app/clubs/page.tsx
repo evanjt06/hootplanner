@@ -150,19 +150,21 @@ export default function Opportunities() {
               </Link>
             
               <Link
-                href="/clubs"
-                className="flex  bg-accent h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-              >
-                <UsersRound className="h-5 w-5" />
-              </Link>
-           
-              <Link
                 href="/research"
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
               >
                 <Microscope className="h-5 w-5" />
               </Link>  
 
+
+              <Link
+                href="/clubs"
+                className="flex  bg-accent h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+              >
+                <UsersRound className="h-5 w-5" />
+              </Link>
+           
+           
                
               <Link
                 href="/settings"
