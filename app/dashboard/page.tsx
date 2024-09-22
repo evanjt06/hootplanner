@@ -2,6 +2,10 @@
 
 import * as React from "react"
 import { useState, useEffect } from "react"
+
+import {jsPDF} from "jspdf"
+import 'jspdf-autotable';  // Ensure autoTable is included
+
 import Image from "next/image"
 import Link from "next/link"
 import {
@@ -92,6 +96,83 @@ export default function Dashboard() {
   const [pc2, setPc2] = useState<string>()
   const [pc3, setPc3] = useState<string>()
 
+  function download() {
+    // download all three versions as a PDF. hootplanner
+    const doc = new jsPDF();
+
+// Set font and title
+doc.setFont('helvetica', 'bold');
+doc.setFontSize(22);
+doc.setTextColor(40, 40, 40);
+doc.text('Weekly Schedule', 105, 20, { align: 'center' });
+
+// Adding a subtitle
+doc.setFontSize(14);
+doc.setTextColor(100, 100, 100);
+doc.text('Fall 2024 | Rice University', 105, 30, { align: 'center' });
+
+// Add a line under title
+doc.setDrawColor(0, 0, 0);
+doc.line(15, 35, 195, 35); // Horizontal line below title
+
+// Define schedule data (example)
+const schedule = [
+  ['Monday', '9:00 AM', 'Data Science Class', 'Room 101'],
+  ['Monday', '11:00 AM', 'CS Club Meeting', 'Room 204'],
+  ['Tuesday', '1:00 PM', 'Machine Learning', 'Lab 3'],
+  ['Wednesday', '9:00 AM', 'Algorithms', 'Room 105'],
+  ['Thursday', '2:00 PM', 'Tennis Practice', 'Court 2'],
+  ['Friday', '10:00 AM', 'Data Science Workshop', 'Room 210'],
+];
+
+// Define the table columns
+const columns = ['Code', 'Course Title', 'Description', 'Prerequisites', "Hours"];
+// Code	Course Title	Description	Prerequisites	Hours	Major	Type	Year
+// Add modern table
+doc.autoTable({
+  head: [columns],
+  body: schedule,
+  theme: 'grid', // 'grid' makes it look modern and structured
+  startY: 40,
+  styles: {
+    font: 'helvetica',
+    fontSize: 12,
+    lineColor: [200, 200, 200],
+    lineWidth: 0.2,
+    cellPadding: 8,
+    textColor: [50, 50, 50],
+  },
+  headStyles: {
+    fillColor: [63, 81, 181], // Modern blue header
+    textColor: 255,
+    fontSize: 12,
+    halign: 'center',
+  },
+  bodyStyles: {
+    fillColor: [245, 245, 245], // Alternating row colors
+    textColor: [0, 0, 0],
+    fontSize: 11,
+  },
+  alternateRowStyles: {
+    fillColor: [255, 255, 255], // Alternate white
+  },
+  columnStyles: {
+    0: { cellWidth: 30 }, // Day column
+    1: { cellWidth: 40 }, // Time column
+    2: { cellWidth: 70 }, // Event column
+    3: { cellWidth: 50 }, // Location column
+  },
+});
+
+// Add footer
+doc.setFontSize(10);
+doc.setTextColor(150);
+doc.text('Generated on: ' + new Date().toLocaleDateString(), 15, 290);
+
+// Save the PDF
+doc.save('schedule.pdf');
+  }
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const version1Data = localStorage.getItem("version_1");
@@ -165,7 +246,7 @@ export default function Dashboard() {
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
           <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-3">
             
-          <h1 className="text-3xl text-center mt-2" style={{fontWeight:900}}>Your Suggested Schedules</h1>
+          <h1 className="text-3xl text-center mt-2" style={{fontWeight:900}}>Your Suggested {courses1[0]?.major} Schedules</h1>
             <h3 className="text-xl text-center mb-2" style={{marginTop: "-20px"}}>
                 AI-generated schedules from HootPlanner, tailored to your preferences and needs.
             </h3>
@@ -182,6 +263,7 @@ export default function Dashboard() {
                     size="sm"
                     // variant="outline"
                     className="h-7 gap-1 text-sm"
+                    onClick={download}
                   >
                     <File className="h-3.5 w-3.5" />
                     <span className="sr-only sm:not-sr-only">Export schedules as PDF</span>
@@ -211,9 +293,8 @@ export default function Dashboard() {
                             Prerequisites
                           </TableHead>
                           <TableHead className="hidden md:table-cell">Hours</TableHead>
-                          <TableHead className="hidden md:table-cell">Major</TableHead>
                           <TableHead className="hidden md:table-cell">Type</TableHead>
-                          <TableHead className="text-right">Year</TableHead>
+                          <TableHead className="hidden md:table-cell">Year</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -234,9 +315,6 @@ export default function Dashboard() {
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
                           {course.hours}
-                          </TableCell>
-                          <TableCell className="hidden md:table-cell">
-                          {course.major}
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
                           {course.type}
@@ -275,9 +353,8 @@ export default function Dashboard() {
                             Prerequisites
                           </TableHead>
                           <TableHead className="hidden md:table-cell">Hours</TableHead>
-                          <TableHead className="hidden md:table-cell">Major</TableHead>
                           <TableHead className="hidden md:table-cell">Type</TableHead>
-                          <TableHead className="text-right">Year</TableHead>
+                          <TableHead className="hidden md:table-cell">Year</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -300,9 +377,6 @@ export default function Dashboard() {
                         {course.hours}
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
-                        {course.major}
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
                         {course.type}
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
@@ -320,7 +394,7 @@ export default function Dashboard() {
                 <Card x-chunk="dashboard-05-chunk-3">
                   <CardHeader className="px-7">
                   <CardTitle style={{fontSize: 24, display: "flex", justifyContent: "space-between"}}>
-                    12-13 credit hour schedule
+                    12-13 credit hours schedule
                     <i style={{color: "darkgreen"}}>{pc3}% similarity</i>
                     </CardTitle>
                   </CardHeader>
@@ -339,9 +413,8 @@ export default function Dashboard() {
                             Prerequisites
                           </TableHead>
                           <TableHead className="hidden md:table-cell">Hours</TableHead>
-                          <TableHead className="hidden md:table-cell">Major</TableHead>
                           <TableHead className="hidden md:table-cell">Type</TableHead>
-                          <TableHead className="text-right">Year</TableHead>
+                          <TableHead className="hidden md:table-cell">Year</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -362,9 +435,6 @@ export default function Dashboard() {
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
                         {course.hours}
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                        {course.major}
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
                         {course.type}

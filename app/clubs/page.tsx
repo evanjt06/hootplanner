@@ -197,7 +197,7 @@ export default function Opportunities() {
     </CardContent>
     <CardFooter className="mt-auto">
       <Button className="w-full">
-        <a href={club.club_link} className="flex w-full justify-center items-center">
+        <a href={club.club_link} target="_blank" className="flex w-full justify-center items-center">
           <ExternalLinkIcon className="mr-2 h-4 w-4" /> View website link
         </a>
       </Button>

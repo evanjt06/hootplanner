@@ -211,12 +211,12 @@ export default function Research() {
     </CardContent>
     <CardFooter className="mt-auto gap-10">
       <Button style={{background: "darkblue"}} className="w-full">
-        <a href={r.link} className="flex w-full justify-center items-center">
+        <a href={r.link} target="_blank" className="flex w-full justify-center items-center">
           <ExternalLinkIcon className="mr-2 h-4 w-4" /> View faculty link
         </a>
       </Button>
       <Button className="w-full">
-        <a href={r.lab_website_link} className="flex w-full justify-center items-center">
+        <a href={r.lab_website_link} target="_blank" className="flex w-full justify-center items-center">
           <ExternalLinkIcon className="mr-2 h-4 w-4" /> View lab/group link
         </a>
       </Button>
