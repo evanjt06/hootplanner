@@ -105,7 +105,7 @@ const doc = new jsPDF();
 doc.setFont('helvetica', 'bold');
 doc.setFontSize(22);
 doc.setTextColor(40, 40, 40);
-doc.text('Semester Schedule', 105, 20, { align: 'center' });
+doc.text('Semester Schedule Version 1', 105, 20, { align: 'center' });
 
 // Adding a subtitle
 doc.setFontSize(14);
@@ -166,15 +166,31 @@ doc.autoTable({
     fillColor: [255, 255, 255], // Alternate white
   },
   columnStyles: {
-    0: { cellWidth: 30 }, // Day column
-    1: { cellWidth: 40 }, // Time column
-    2: { cellWidth: 70 }, // Event column
-    3: { cellWidth: 50 }, // Location column
+    0: { cellWidth: 40 }, // Day column
+    1: { cellWidth: 70 }, // Time column
+    2: { cellWidth: 30 }, // Event column
+    3: { cellWidth: 40 }, // Location column
   },
 });
 
 // 2nd page
 doc.addPage();
+
+
+// Set font and title
+doc.setFont('helvetica', 'bold');
+doc.setFontSize(22);
+doc.setTextColor(40, 40, 40);
+doc.text('Semester Schedule Version 2', 105, 20, { align: 'center' });
+
+// Adding a subtitle
+doc.setFontSize(14);
+doc.setTextColor(100, 100, 100);
+doc.text('Fall 2024 | Rice University', 105, 30, { align: 'center' });
+
+// Add a line under title
+doc.setDrawColor(0, 0, 0);
+doc.line(15, 35, 195, 35); // Horizontal line below title
 
 // v2 schedule
 const v2 = localStorage.getItem("version_2")
@@ -215,14 +231,30 @@ doc.autoTable({
     fillColor: [255, 255, 255], // Alternate white
   },
   columnStyles: {
-    0: { cellWidth: 30 }, // Day column
-    1: { cellWidth: 40 }, // Time column
-    2: { cellWidth: 70 }, // Event column
-    3: { cellWidth: 50 }, // Location column
+    0: { cellWidth: 40 }, // Day column
+    1: { cellWidth: 70 }, // Time column
+    2: { cellWidth: 30 }, // Event column
+    3: { cellWidth: 40 }, // Location column
   },
 });
 
 doc.addPage()
+
+
+// Set font and title
+doc.setFont('helvetica', 'bold');
+doc.setFontSize(22);
+doc.setTextColor(40, 40, 40);
+doc.text('Semester Schedule Version 3', 105, 20, { align: 'center' });
+
+// Adding a subtitle
+doc.setFontSize(14);
+doc.setTextColor(100, 100, 100);
+doc.text('Fall 2024 | Rice University', 105, 30, { align: 'center' });
+
+// Add a line under title
+doc.setDrawColor(0, 0, 0);
+doc.line(15, 35, 195, 35); // Horizontal line below title
 
 // v3 schedule
 const v3 = localStorage.getItem("version_3")
@@ -263,10 +295,10 @@ doc.autoTable({
     fillColor: [255, 255, 255], // Alternate white
   },
   columnStyles: {
-    0: { cellWidth: 30 }, // Day column
-    1: { cellWidth: 40 }, // Time column
-    2: { cellWidth: 70 }, // Event column
-    3: { cellWidth: 50 }, // Location column
+    0: { cellWidth: 40 }, // Day column
+    1: { cellWidth: 70 }, // Time column
+    2: { cellWidth: 30 }, // Event column
+    3: { cellWidth: 40 }, // Location column
   },
 });
 
