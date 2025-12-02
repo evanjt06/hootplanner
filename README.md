@@ -1,5 +1,8 @@
 # HootPlanner
 
+## Demo
+Please visit https://devpost.com/software/hoot-planner to see a demo of the project.
+
 ## Inspiration
 Course discovery and scheduling are often overwhelming and confusing. Students frequently miss exciting research opportunities they never knew existed. They are also troubled with too many choices in clubs and activities. Seeing this, we started working on **HootPlanner**.
 
